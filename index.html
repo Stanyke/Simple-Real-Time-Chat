@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Real Time Chat By Stanyke</title>
+    </head>
+ 
+    <body>
+        <h1>Communication with socket.io!</h1>
+
+        <p><input type="button" value="Poke the server" id="poke" /></p>
+
+
+        <script src="/socket.io/socket.io.js"></script>
+
+
+        <script>
+            var socket = io.connect('http://localhost:8080');
+        
+            //Here is what pushes out the message passed to the client from the server
+            socket.on('message', function(message)
+            {
+                alert('The server has a message for you: ' + message);
+            });
+
+            document.getElementById('poke').onClick =  () =>
+            {
+                socket.emit('message', 'Hi server, how are you?');
+            }
+        </script>
+
+    </body>
+</html>

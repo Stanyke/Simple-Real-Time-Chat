@@ -1,0 +1,27 @@
+{
+  "name": "real-time-chat",
+  "version": "1.0.0",
+  "description": "This is a very simple real time chat support which runs locally with the help of Socket.io on NodeJS",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stanyke/Simple-Real-Time-Chat.git"
+  },
+  "keywords": [
+    "chat",
+    "socket.io",
+    "user"
+  ],
+  "author": "Stanley Chibuike",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Stanyke/Simple-Real-Time-Chat/issues"
+  },
+  "homepage": "https://github.com/Stanyke/Simple-Real-Time-Chat#readme",
+  "dependencies": {
+    "socket.io": "^2.3.0"
+  }
+}
