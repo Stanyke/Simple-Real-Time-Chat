@@ -1,34 +1,27 @@
-var http = require('http');
-var fs = require('fs');
+var app = require('express')(),
+    server = require('http').createServer(app),
+    io = require('socket.io').listen(server),
+    ent = require('ent'), // Blocks HTML characters (security equivalent to htmlentities in PHP)
+    fs = require('fs');
 
-// Loading the index file . html displayed to the client
-var server = http.createServer(function(req, res) {
-    fs.readFile('./index.html', 'utf-8', function(error, content) {
-        res.writeHead(200, {"Content-Type": "text/html"});
-        res.end(content);
+// Loading the page index.html
+app.get('/', function (req, res) {
+  res.sendfile(__dirname + '/index.html');
+});
+
+io.sockets.on('connection', function (socket, username) {
+    // When the username is received it’s stored as a session variable and informs the other people
+    socket.on('new_client', function(username) {
+        username = ent.encode(username);
+        socket.username = username;
+        socket.broadcast.emit('new_client', username);
     });
-});
 
-// Loading socket.io
-var io = require('socket.io').listen(server);
-
-// When a client connects, we note it in the console
-io.sockets.on('connection', function (socket) {
-    console.log('A client is connected!');
-});
-
-//Sever should send a message to client as soon the user connects
-io.sockets.on('connection', function (socket) {
-    socket.emit('message', 'You are connected!');
-
-    //Recieve a message from the frontend
+    // When a message is received, the client’s username is retrieved and sent to the other people
     socket.on('message', function (message) {
-        console.log('A client is speaking to me! They’re saying: ' + message);
-    });
-
-    //Sends to everyother user logged in except the current user that just logged in
-    socket.broadcast.emit('message', 'Another client has just connected!');
+        message = ent.encode(message);
+        socket.broadcast.emit('message', {username: socket.username, message: message});
+    }); 
 });
-
 
 server.listen(8080);
